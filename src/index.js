@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';  // If you have a custom stylesheet
+import './index.css'; 
 
 const App = () => {
   // State to manage form fields
