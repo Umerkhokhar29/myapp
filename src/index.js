@@ -24,6 +24,7 @@ const App = () => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -37,8 +38,8 @@ const App = () => {
       alert("Invalid email format.");
       return;
     }
-    if(formData.address.length<10){
-      alert("Please enter proper Address");
+    if(formData.address.length < 10){
+      alert("Please enter a proper address.");
       return;
     }
 
@@ -59,6 +60,11 @@ const App = () => {
       gender: '',
       address: '',
     });
+  };
+
+  // Handle deleting user
+  const handleDelete = (userId) => {
+    setUsers(users.filter((user) => user.id !== userId));
   };
 
   return (
@@ -117,9 +123,8 @@ const App = () => {
           </select>
         </label>
         <br />
-
-        <label>
-          Address:
+    <label>Address:</label>
+      <label> .
           <textarea
             name="address"
             value={formData.address}
@@ -142,6 +147,7 @@ const App = () => {
             <p><strong>Age:</strong> {user.age}</p>
             <p><strong>Gender:</strong> {user.gender}</p>
             <p><strong>Address:</strong> {user.address}</p>
+            <button onClick={() => handleDelete(user.id)}>Delete</button>
           </div>
         ))}
       </div>
