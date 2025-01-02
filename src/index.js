@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css'; 
+import './index.css';
+
+let userIdCounter = 1; // Starting ID for users
 
 const App = () => {
-  // State to manage form fields
+  // State to manage form fields and the list of users
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -11,6 +13,7 @@ const App = () => {
     gender: '',
     address: '',
   });
+  const [users, setUsers] = useState([]); // Store submitted users here
 
   // Handling input changes
   const handleChange = (e) => {
@@ -23,7 +26,39 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);  // This is where you will handle form submission logic
+
+    // Custom Validation
+    if (formData.age < 18) {
+      alert("Age must be 18 or older.");
+      return;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      alert("Invalid email format.");
+      return;
+    }
+    if(formData.address.length<10){
+      alert("Please enter proper Address");
+      return;
+    }
+
+    // Create a new user with a unique ID
+    const newUser = {
+      id: `USER-${userIdCounter++}`, // Incremental ID
+      ...formData,
+    };
+
+    // Add the new user to the users list
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+
+    // Clear the form after submission
+    setFormData({
+      fullName: '',
+      email: '',
+      age: '',
+      gender: '',
+      address: '',
+    });
   };
 
   return (
@@ -96,6 +131,20 @@ const App = () => {
 
         <button type="submit">Submit</button>
       </form>
+
+      {/* Display user containers */}
+      <div className="users-list">
+        {users.map((user) => (
+          <div key={user.id} className="user-container">
+            <h3>{user.id}</h3>
+            <p><strong>Full Name:</strong> {user.fullName}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>Age:</strong> {user.age}</p>
+            <p><strong>Gender:</strong> {user.gender}</p>
+            <p><strong>Address:</strong> {user.address}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

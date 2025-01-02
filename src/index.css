@@ -1,22 +1,32 @@
 /* src/index.css */
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f4f4f9;
-  }
-  
-  .form-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-  }
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column; /* Allow content to stack vertically */
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh; /* Ensure content height adapts */
+  margin: 0;
+  background-color: #f4f4f9;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.form-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px; /* Add spacing from the user containers */
+}
+
+.user-container {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
   
   form {
     display: flex;
@@ -45,5 +55,24 @@ body {
   
   button:hover {
     background-color: #45a049;
+  }
+
+  .user-card {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    border-left: 4px solid #4CAF50;
+  }
+  
+  .user-card h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .user-card p {
+    margin: 5px 0;
+    color: #555;
   }
   
