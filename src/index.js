@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-let userIdCounter = 1; // Starting ID for users
+let userIdCounter = 1; // Starting ID for users--incremental ID
 
 const App = () => {
   // State to manage form fields and the list of users
