@@ -41,6 +41,25 @@ app.post("/add-user", (req, res) => {
     }
   });
 });
+app.post("/delete-user", (req,res) => {
+    const {userId} = req.body;
+
+    const query = "DELETE from users_data_table where id = ? ";
+    db.query(query, [userId], (err,result)=> {
+        if(err){
+            console.error("Error deleting data:",err.message);
+            res.status(500).send("Failed to delete user.");
+        }
+        else if(result.affectedRows=0){
+            res.status(404).send("User not found.");
+        }
+        else{
+            res.status(200).send("User deleted successfully.")
+        }
+    }); 
+
+    
+});
 
 // Start the server
 app.listen(5000, () => {

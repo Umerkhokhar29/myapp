@@ -44,6 +44,30 @@ const App = () => {
       console.error('Error occurred while adding user:', error);
     }
   };
+  const deleteUserFromDB = async(userId) => {
+    try{
+        const response = await fetch('http://localhost:5000/delete-user', {
+          method : 'POST',
+          headers : {
+            'Content-Type' : 'application/json',
+          },
+          body : JSON.stringify({userId}),
+        });
+        
+        if(response.ok) {
+          console.log('User deleted successfully from the database');
+          return true;
+        }
+        else{
+          console.error('Failed to delete user from the database');
+          return false;
+        }
+    }
+    catch(error){
+      console.error('Error occurred while deleting user:', error);
+      return false;
+    }
+  }
   
   // Handle form submission
   const handleSubmit = (e) => {
@@ -66,7 +90,7 @@ const App = () => {
 
     // Create a new user with a unique ID
     const newUser = {
-      id: `USER-${userIdCounter++}`, // Incremental ID
+      id: `${userIdCounter++}`, // Incremental ID
       ...formData,
     }
     
@@ -87,9 +111,14 @@ const App = () => {
   };
 
   // Handle deleting user
-  const handleDelete = (userId) => {
-    setUsers(users.filter((user) => user.id !== userId));
+  const handleDelete = async (userID) => {
+    const isDeleted = await deleteUserFromDB(userID);
+  
+    if (isDeleted) {
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userID));
+    }
   };
+  
 
   return (
     <div className="form-container">
