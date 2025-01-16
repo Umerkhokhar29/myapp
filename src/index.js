@@ -24,6 +24,27 @@ const App = () => {
     }));
   };
 
+  //adds user data to the datatbae
+  const addUserToDB = async (userData) => {
+    try {
+      const response = await fetch('http://localhost:5000/add-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (response.ok) {
+        console.log('User added successfully to the database');
+      } else {
+        console.error('Failed to add user to the database');
+      }
+    } catch (error) {
+      console.error('Error occurred while adding user:', error);
+    }
+  };
+  
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,7 +68,10 @@ const App = () => {
     const newUser = {
       id: `USER-${userIdCounter++}`, // Incremental ID
       ...formData,
-    };
+    }
+    
+    addUserToDB(newUser);
+    ;
 
     // Add the new user to the users list
     setUsers((prevUsers) => [...prevUsers, newUser]);
