@@ -1,5 +1,3 @@
-console.log('MONGO_URI:', process.env.MONGO_URI);
-console.log('MONGO_DATABASE:', process.env.MONGO_DATABASE);
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
@@ -32,6 +30,7 @@ app.post('/add-user', async (req, res) => {
     const { fullName, email, age, gender, address } = req.body;
     const newUser = { fullName, email, age, gender, address };
     const result = await usersCollection.insertOne(newUser);
+    console.log('User added:', result.insertedId);
     res.status(201).json({ _id: result.insertedId });
   } catch (error) {
     console.error('Error inserting data:', error.message);
