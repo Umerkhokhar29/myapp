@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-let userIdCounter = 1; // Starting ID for users--incremental ID
-
 const App = () => {
   // State to manage form fields and the list of users
   const [formData, setFormData] = useState({
@@ -24,81 +22,88 @@ const App = () => {
     }));
   };
 
-  //adds user data to the datatbae
+  // Add user data to the database
   const addUserToDB = async (userData) => {
     try {
-      const response = await fetch('http://localhost:5000/add-user', {
+      const response = await fetch('/api/add-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
       });
-  
+
       if (response.ok) {
+        const data = await response.json();
         console.log('User added successfully to the database');
+        return data._id; // Return the MongoDB-generated _id
       } else {
         console.error('Failed to add user to the database');
+        return null;
       }
     } catch (error) {
       console.error('Error occurred while adding user:', error);
+      return null;
     }
   };
-  const deleteUserFromDB = async(userId) => {
-    try{
-        const response = await fetch('http://localhost:5000/delete-user', {
-          method : 'POST',
-          headers : {
-            'Content-Type' : 'application/json',
-          },
-          body : JSON.stringify({userId}),
-        });
-        
-        if(response.ok) {
-          console.log('User deleted successfully from the database');
-          return true;
-        }
-        else{
-          console.error('Failed to delete user from the database');
-          return false;
-        }
-    }
-    catch(error){
+
+  // Function to delete user from the backend
+  const deleteUserFromDB = async (userId) => {
+    try {
+      const response = await fetch('/api/delete-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }), // Sending userId to the backend
+      });
+
+      if (response.ok) {
+        console.log('User deleted successfully from the database');
+        return true;
+      } else {
+        console.error('Failed to delete user from the database');
+        return false;
+      }
+    } catch (error) {
       console.error('Error occurred while deleting user:', error);
       return false;
     }
-  }
-  
+  };
+
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Custom Validation
     if (formData.age < 18) {
-      alert("Age must be 18 or older.");
+      alert('Age must be 18 or older.');
       return;
     }
 
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      alert("Invalid email format.");
+      alert('Invalid email format.');
       return;
     }
-    if(formData.address.length < 10){
-      alert("Please enter a proper address.");
+    if (formData.address.length < 10) {
+      alert('Please enter a proper address.');
       return;
     }
 
-    // Create a new user with a unique ID
+    // Create a new user
     const newUser = {
-      id: `${userIdCounter++}`, // Incremental ID
       ...formData,
-    }
-    
-    addUserToDB(newUser);
-    ;
+    };
 
-    // Add the new user to the users list
-    setUsers((prevUsers) => [...prevUsers, newUser]);
+    const userId = await addUserToDB(newUser); // Get the MongoDB-generated _id
+
+    if (userId) {
+      // Generate displayId (e.g., USER-1, USER-2)
+      const displayId = `USER-${users.length + 1}`;
+
+      // Add the new user to the users list with the MongoDB-generated _id and displayId
+      setUsers((prevUsers) => [...prevUsers, { _id: userId, displayId, ...newUser }]);
+    }
 
     // Clear the form after submission
     setFormData({
@@ -110,15 +115,23 @@ const App = () => {
     });
   };
 
-  // Handle deleting user
+  // Handle delete button click
   const handleDelete = async (userID) => {
     const isDeleted = await deleteUserFromDB(userID);
-  
+
     if (isDeleted) {
-      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userID));
+      // Remove the deleted user from the state
+      setUsers((prevUsers) => {
+        const updatedUsers = prevUsers.filter((user) => user._id !== userID);
+
+        // Reassign displayIds to maintain sequential order
+        return updatedUsers.map((user, index) => ({
+          ...user,
+          displayId: `USER-${index + 1}`,
+        }));
+      });
     }
   };
-  
 
   return (
     <div className="form-container">
@@ -176,8 +189,9 @@ const App = () => {
           </select>
         </label>
         <br />
-    <label>Address:</label>
-      <label> .
+
+        <label>
+          Address:
           <textarea
             name="address"
             value={formData.address}
@@ -193,14 +207,24 @@ const App = () => {
       {/* Display user containers */}
       <div className="users-list">
         {users.map((user) => (
-          <div key={user.id} className="user-container">
-            <h3>{user.id}</h3>
-            <p><strong>Full Name:</strong> {user.fullName}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Age:</strong> {user.age}</p>
-            <p><strong>Gender:</strong> {user.gender}</p>
-            <p><strong>Address:</strong> {user.address}</p>
-            <button onClick={() => handleDelete(user.id)}>Delete</button>
+          <div key={user._id} className="user-container">
+            <h3>{user.displayId}</h3> {/* Display USER-1, USER-2, etc. */}
+            <p>
+              <strong>Full Name:</strong> {user.fullName}
+            </p>
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+            <p>
+              <strong>Age:</strong> {user.age}
+            </p>
+            <p>
+              <strong>Gender:</strong> {user.gender}
+            </p>
+            <p>
+              <strong>Address:</strong> {user.address}
+            </p>
+            <button onClick={() => handleDelete(user._id)}>Delete</button> {/* Use _id for deletion */}
           </div>
         ))}
       </div>
