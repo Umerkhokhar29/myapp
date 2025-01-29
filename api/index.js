@@ -1,3 +1,5 @@
+console.log('MONGO_URI:', process.env.MONGO_URI);
+console.log('MONGO_DATABASE:', process.env.MONGO_DATABASE);
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
