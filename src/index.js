@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 const App = () => {
   // State to manage form fields and the list of users
