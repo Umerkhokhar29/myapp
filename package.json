@@ -6,6 +6,7 @@
     "@babel/runtime": "^7.26.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "cra-template": "1.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongodb": "^6.12.0",
@@ -16,24 +17,17 @@
     "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "node api/index.js",   
-    "dev": "react-scripts start",  
-    "build": "react-scripts build",
+    "start": "react-scripts start", 
+    "build": "react-scripts build", 
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node api/index.js" 
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": ["react-app", "react-app/jest"]
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
