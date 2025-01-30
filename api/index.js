@@ -38,29 +38,5 @@ app.post('/add-user', async (req, res) => {
   }
 });
 
-// API endpoint to delete a user
-app.post('/delete-user', async (req, res) => {
-  const { userId } = req.body;
-
-  if (!ObjectId.isValid(userId)) {
-    return res.status(400).send('Invalid user ID format.');
-  }
-
-  const objectId = new ObjectId(userId);
-
-  try {
-    const result = await usersCollection.deleteOne({ _id: objectId });
-    if (result.deletedCount === 0) {
-      res.status(404).send('User not found.');
-    } else {
-      console.log('User deleted:', userId);
-      res.status(200).send('User deleted successfully.');
-    }
-  } catch (error) {
-    console.error('Error deleting user:', error.message);
-    res.status(500).send('Failed to delete user.');
-  }
-});
-
 // Export the Express app as a serverless function
 module.exports = app;
