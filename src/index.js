@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { useEffect } from 'react';
 
 const App = () => {
   // State to manage form fields and the list of users
@@ -22,17 +21,6 @@ const App = () => {
       [name]: value,
     }));
   };
-
-  useEffect(() => {
-    fetch('https://myapp-virid-chi.vercel.app/api/test')
-      .then(response => response.text())
-      .then(data => {
-        console.log(data); // Log the response in the browser console
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }, []);
 
   // Add user data to the database
   const addUserToDB = async (userData) => {

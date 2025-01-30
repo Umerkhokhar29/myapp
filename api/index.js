@@ -24,11 +24,6 @@ async function connectToMongoDB() {
 
 connectToMongoDB();
 
-//testing API
-app.get('/test', (req, res) => {
-  res.status(200).json({ message: "Backend is working!" });
-});
-
 // API endpoint to add a user
 app.post('/add-user', async (req, res) => {
   try {
@@ -58,6 +53,7 @@ app.post('/delete-user', async (req, res) => {
     if (result.deletedCount === 0) {
       res.status(404).send('User not found.');
     } else {
+      console.log('User deleted:', userId);
       res.status(200).send('User deleted successfully.');
     }
   } catch (error) {
@@ -66,4 +62,5 @@ app.post('/delete-user', async (req, res) => {
   }
 });
 
+// Export the Express app as a serverless function
 module.exports = app;
