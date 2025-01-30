@@ -25,7 +25,7 @@ const App = () => {
   // Add user data to the database
   const addUserToDB = async (userData) => {
     try {
-      const response = await fetch('/api/add-user', {
+      const response = await fetch('http://localhost:5000/add-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const App = () => {
   // Function to delete user from the backend
   const deleteUserFromDB = async (userId) => {
     try {
-      const response = await fetch('/api/delete-user', {
+      const response = await fetch('http://localhost:5000/delete-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
